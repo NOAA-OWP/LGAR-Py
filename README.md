@@ -50,13 +50,11 @@ In the outputs folder, there are 6 complete simulation outputs, including 3 simu
 
 ----
 
-## Open source licensing info
-1. [TERMS](TERMS.md)
-2. [LICENSE](LICENSE)
+
 
 
 ----
 
 ## Credits and references
 
-LGAR is 
+LGAR is
