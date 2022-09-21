@@ -1,5 +1,3 @@
-The Layered Green-Ampt with Redistribution (LGAR) model as implemented in python can be found here. 
-
 In order to successfully run the LGAR model, the config file must be filled out correctly, and the correct files must be present in the parameter_files, forcing_data_files, and config_files folders. These components are described here.
 
 In the config file for a given LGAR model run, "output_file_name_fluxes" is the file path and name of the output file, which will contain fluxes per time step, cumulative fluxes, forcing data, and mass balance calculations. 

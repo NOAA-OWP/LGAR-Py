@@ -1,92 +1,51 @@
-#### OWP Open Source Project Template Instructions
 
-1. Create a new project.
-2. [Copy these files into the new project](#installation)
-3. Update the README, replacing the contents below as prescribed.
-4. Add any libraries, assets, or hard dependencies whose source code will be included
-   in the project's repository to the _Exceptions_ section in the [TERMS](TERMS.md).
-  - If no exceptions are needed, remove that section from TERMS.
-5. If working with an existing code base, answer the questions on the [open source checklist](opensource-checklist.md)
-6. Delete these instructions and everything up to the _Project Title_ from the README.
-7. Write some great software and tell people about it.
 
-> Keep the README fresh! It's the first thing people see and will make the initial impression.
+# Layered Green & Ampt with redistribution (LGAR) in python
 
-## Installation
-
-To install all of the template files, run the following script from the root of your project's directory:
-
-```
-bash -c "$(curl -s https://raw.githubusercontent.com/NOAA-OWP/owp-open-source-project-template/open_source_template.sh)"
-```
-
-----
-
-# Project Title
-
-**Description**:  Put a meaningful, short, plain-language description of what
-this project is trying to accomplish and why it matters.
-Describe the problem(s) this project solves.
-Describe how this software can improve the lives of its audience.
+**Description**:  LGAR is a model which partitions precipitation into infiltration and runoff, and is designed for use in arid or semi arid climates. LGAR's main selling point is that it closely mimics precipitation partitioning results as simulated by the Richards / Richardson equation (RRE), without the inherent reliability and stability challenges the RRE poses. Therefore, this model is useful when accurate, stable precipitation partitioning simulations are desired in arid or semi arid areas. LGAR as implemented in Python is BMI compatible. LGAR is currently being developed in C as well.
 
 Other things to include:
 
-  - **Technology stack**: Indicate the technological nature of the software, including primary programming language(s) and whether the software is intended as standalone or as a module in a framework or other ecosystem.
-  - **Status**:  Alpha, Beta, 1.1, etc. It's OK to write a sentence, too. The goal is to let interested people know where this project is at. This is also a good place to link to the [CHANGELOG](CHANGELOG.md).
-  - **Links to production or demo instances**
-  - Describe what sets this apart from related-projects. Linking to another doc or page is OK if this can't be expressed in a sentence or two.
-
-
-**Screenshot**: If the software has visual components, place a screenshot after the description; e.g.,
-
-![](https://raw.githubusercontent.com/NOAA-OWP/owp-open-source-project-template/master/doc/Screenshot.png)
+  - **Status**:  As of this writing (21 September 2022), this model will soon be submitted to WRR.
+  - **Links to production or demo instances** Animations of LGAR simulations can be found at: https://www.hydroshare.org/resource/46747d77d0ce4995b1e1d58384e15a09/
 
 
 ## Dependencies
 
-Describe any dependencies that must be installed for this software to work.
-This includes programming languages, databases or other storage mechanisms, build tools, frameworks, and so forth.
-If specific versions of other software are required, or known not to work, call that out.
-
-## Installation
-
-Detailed instructions on how to install, configure, and get the project running.
-This should be frequently tested to ensure reliability. Alternatively, link to
-a separate [INSTALL](INSTALL.md) document.
-
-## Configuration
-
-If the software is configurable, describe it in detail, either here or in other documentation to which you link.
+This project requires Python 3.
 
 ## Usage
 
-Show users how to use the software.
-Be specific.
-Use appropriate formatting when showing code snippets.
+In order to successfully run the LGAR model, the config file must be filled out correctly, and the correct files must be present in the parameter_files, forcing_data_files, and config_files folders. These components are described here.
+
+In the config file for a given LGAR model run, "output_file_name_fluxes" is the file path and name of the output file, which will contain fluxes per time step, cumulative fluxes, forcing data, and mass balance calculations.
+
+"forcing_data_folder" is the path that contains the relevant forcing data files for the model run.
+
+"raw_forcing_data_file_name" is the name of the raw, unformatted forcing data file.
+
+"formatted_forcing_data_name" will be the name of the output, correctly resampled and formatted csv file that LGAR saves to the disk. While this is not necessary for the model to run per se, it is useful to have the reformatted forcing data saved.
+
+"params_file" is the path and name of the parameters file to be used with the model.
+
+"forcing_data_formatter_file" is the path and name of the .py file that converts the raw forcing data file to a format that is usable by LGAR.
+
+
+The model will run correctly if these variable names are filled out in the config file, and if the files occur in the correct places. LGAR also requires the files LGAR_compute.py, test_env.py, and BMI_base_class.py, to be in the same directory. In order to run LGAR, ensure that the correct config file is indicated in test_env.py, and then navigate in a terminal to the directory containing these files and run "python test_env.py".
+
+The Jupyter notebooks (in vis_files) are useful for visualization of results. HYDRUS_files contains HYDRUS-1D model runs which are set up to simulate the same soil hydraulic conditions and forcing data as various LGAR runs.
 
 ## How to test the software
 
-If the software includes automated tests, detail how to run those tests.
+In the outputs folder, there are 6 complete simulation outputs, including 3 simulations of USDA SCAN sites, and 3 simulations with synthetically generated forcing datasets. All of the files necessary to run these simulations are also included. In order to check if LGAR is working properly for you, you can run these simulations and compare your results agains the outputs stored in this repo.
 
 ## Known issues
 
-Document any known significant shortcomings with the software.
 
-## Getting help
-
-Instruct users how to get help with this software; this might include links to an issue tracker, wiki, mailing list, etc.
-
-**Example**
-
-If you have questions, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker.
 
 ## Getting involved
 
-This section should detail why people should get involved and describe key areas you are
-currently focusing on; e.g., trying to get feedback on features, fixing certain bugs, building
-important pieces, etc.
 
-General instructions on _how_ to contribute should be stated with a link to [CONTRIBUTING](CONTRIBUTING.md).
 
 
 ----
@@ -100,6 +59,4 @@ General instructions on _how_ to contribute should be stated with a link to [CON
 
 ## Credits and references
 
-1. Projects that inspired you
-2. Related projects
-3. Books, papers, talks, or other sources that have meaningful impact or influence on this project
+LGAR is 
