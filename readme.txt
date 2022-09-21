@@ -17,4 +17,4 @@ In the config file for a given LGAR model run, "output_file_name_fluxes" is the 
 
 The model will run correctly if these variable names are filled out in the config file, and if the files occur in the correct places. LGAR also requires the files LGAR_compute.py, test_env.py, and BMI_base_class.py, to be in the same directory. In order to run LGAR, ensure that the correct config file is indicated in test_env, and then navigate in a terminal to the directory containing these files and run "python test_env.py". 
 
-The Jupyter notebooks (in vis_files) are useful for visualization of results. HYDRUS_files contains HYDRUS-1D model runs which are set up to simulate the same soil hydraulic conditions and forcing data as various LGAR runs. Test 
+The Jupyter notebooks (in vis_files) are useful for visualization of results. HYDRUS_files contains HYDRUS-1D model runs which are set up to simulate the same soil hydraulic conditions and forcing data as various LGAR runs. 
