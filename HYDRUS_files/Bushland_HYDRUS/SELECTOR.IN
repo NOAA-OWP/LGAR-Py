@@ -1,0 +1,47 @@
+Pcp_File_Version=4
+*** BLOCK A: BASIC INFORMATION *****************************************
+Heading
+Welcome to HYDRUS-1D
+LUnit  TUnit  MUnit  (indicated units are obligatory for all input data)
+mm
+min
+mmol
+lWat   lChem lTemp  lSink lRoot lShort lWDep lScreen lVariabBC lEquil lInverse
+ t     f     f      t     f     t      f     t       t         t         f
+lSnow  lHP1   lMeteo  lVapor lActiveU lFluxes lIrrig  lDummy  lDummy  lDummy
+ f       f       f       f       f       t       f       f       f       f
+NMat    NLay  CosAlpha
+  3       1       1
+*** BLOCK B: WATER FLOW INFORMATION ************************************
+MaxIt   TolTh   TolH       (maximum number of iterations and tolerances)
+  10   1e-005  0.001
+TopInf WLayer KodTop InitCond
+ t     t      -1       f
+BotInf qGWLF FreeD SeepF KodBot DrainF  hSeep
+ f     f     f     f     -1      f      0
+         rTop         rBot        rRoot
+           0            0            0
+    hTab1   hTabN
+    0.0001  1e+006
+    Model   Hysteresis
+      0          0
+   thr     ths    Alfa      n         Ks       l
+ 0.0649  0.4481 0.0009567   1.379  0.0116667     0.5 
+ 0.0672   0.476 0.0005288  1.5276 0.00333333     0.5 
+ 0.0823  0.4782 0.0004467  1.4585  0.0333333     0.5 
+*** BLOCK C: TIME INFORMATION ******************************************
+        dt       dtMin       dtMax     DMul    DMul2  ItMin ItMax  MPL
+          5      5e-008           5     1.3     0.7     3     7    10
+      tInit        tMax
+          0      500000
+  lPrintD  nPrintSteps tPrintInterval lEnter
+     t           1             5       t
+TPrint(1),TPrint(2),...,TPrint(MPL)
+      50000      100000      150000      200000      250000      300000 
+     350000      400000      450000      500000 
+*** BLOCK G: ROOT WATER UPTAKE INFORMATION *****************************
+     Model  (0 - Feddes, 1 - S shape)  cRootMax    OmegaC
+        1                                   1
+       h50       P3
+  -8242.2         3
+*** END OF INPUT FILE 'SELECTOR.IN' ************************************
