@@ -56,5 +56,3 @@ In the outputs folder, there are 6 complete simulation outputs, including 3 simu
 ----
 
 ## Credits and references
-
-LGAR is
