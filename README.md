@@ -16,9 +16,9 @@ This project requires Python 3.
 
 In order to successfully run the LGAR model, the config file must be filled out correctly, and the correct files must be present in the parameter_files, forcing_data_files, and config_files folders.
 
-\
 
-**Config file contents**
+
+##Config file contents
 
 The contents of the first two blocks of the config file for a model run are described here.
 
@@ -39,16 +39,16 @@ params_file: this is the path and name of the parameters file
 forcing_data_file: this is the forcing data file that is in the correct format for LGAR-Py
 
 
-**parameter_files**
+##parameter_files
 
 Each parameter file, in the parameter_files folder, only has to be edited in the first block, which contains options related to soil hydraulic parameters, number of layers, maximum ponded head, and options related to the PET -> AET correction.
 
 
-**forcing_data_files**
+##forcing_data_files
 
 This folder contains sub folders for each model run. All that is necessary to run LGAR is correctly formatted forcing data as a .csv. Raw USDA SCAN data and notebooks that convert these raw data to the format usable by LGAR are also provided.
 
-**other useful files**
+##other useful files
 
 LGAR also requires the files LGAR_compute.py, test_env.py, and BMI_base_class.py, to be in the same directory.
 
