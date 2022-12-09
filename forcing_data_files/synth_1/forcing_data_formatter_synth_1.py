@@ -67,7 +67,7 @@ def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_
         forcing_data['P(mm/h)'][i] = forcing_data['P(mm/h)'][i]*0
         forcing_data['PET(mm/h)'][i] = forcing_data['PET(mm/h)'][i]*0
 
-    precip_number = 50### 20 in the manuscript, temporarily changing to 50 for comparison to LGARTO 
+    precip_number = 20### 20 in the manuscript, temporarily changing to 50 for comparison to LGARTO 
 
     # for i in range(0,6):
     #     forcing_data['P(mm/h)'][i] = 0
