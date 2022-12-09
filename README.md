@@ -39,7 +39,7 @@ params_file: this is the path and name of the parameters file
 forcing_data_file: this is the forcing data file that is in the correct format for LGAR-Py
 
 
-##parameter_files
+##Parameter_files
 
 Each parameter file, in the parameter_files folder, only has to be edited in the first block, which contains options related to soil hydraulic parameters, number of layers, maximum ponded head, and options related to the PET -> AET correction.
 
