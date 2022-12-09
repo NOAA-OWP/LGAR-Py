@@ -1,73 +1,41 @@
 #python test environment for LGAR
 
+
+###all the user has to do is specify the path of the config file in the block directly below. No other changes are necessary in test_env.py
+
+#######
+#config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_synth_1.py'
+#config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_synth_2.py'
+#config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_synth_3.py'
+#config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_Phillipsburg.py'
+#config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_Bushland.py'
+config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_Fort_Assiniboine.py'
+#######
+
+
+
+
+
+
+
+
+
+####### commands to run the model
 import importlib
 import numpy as np
-
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_files/config_Panama.py'
-config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_files/config_synth_1.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_files/config_synth_2.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_files/config_synth_3.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_files/config_Phillipsburg.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_files/config_Bushland.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_files/config_Fort_Assiniboine.py'
-
-# folder_name = 'Bushland_project'
-# config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/Bushland_project/config.py'
-
-# folder_name = 'Phillipsburg_project'
-# config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/Phillipsburg_project/config.py'
-
-# folder_name = 'Fort_Assiniboine_project'
-# config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/Fort_Assiniboine_project/config.py'
-
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_Phillipsburg.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_synth_1.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_synth_2.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_synth_3.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_synth_4.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_Bushland.py'
-
-
-
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_Los_Lunas.py'
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_Sidney.py'
-
-#####config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_video.py'
-
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_video_old.py'
-
-#config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/config_short_synthetic.py'
-
-
-# folder_name = 'Panama_project'
-# config_string = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/Panama_project/config.py'
-
-
-#config = importlib.import_module('config.py')
 
 import LGAR_compute as LGAR_compute
 
 test=LGAR_compute.LGAR(config_string)
 
-# print('set_value test')
-# test_val=1
-# test.set_value('land_surface_water__infiltration_ponding_depth',test_val)
-# print(test.actual_infiltration_vec[-1])
-# print(test.actual_infiltration_mm_per_h)
-# print(' ')
-#
-# 1/0
-
 test.run_model(test.length_of_simulation)
-#test.finalize()
-# print('this text means that the class ran successfully')
-# print(' ')
 
 test.finalize()
+#######
 
 
 
-###########everything below here tests the rest of the BMI functions
+#######everything below here tests the rest of the BMI functions
 
 # print('get_value test, soil moisture vector')
 # print(test.get_value('soil_water__volume_fraction'))
