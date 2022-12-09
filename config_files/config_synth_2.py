@@ -49,7 +49,7 @@ forcing_data_file = '/Users/peterlafollette/Desktop/LGAR-py/forcing_data_files/s
 ###code that loads forcing data and params
 import importlib.util
 import pandas as pd
-forcing_data = pd.read_csv(forcing_data_file,index_col=0)
+forcing_data = pd.read_csv(forcing_data_file,index_col=0,parse_dates=True)
 
 params = importlib.util.spec_from_file_location("params", params_file)
 foo = importlib.util.module_from_spec(params)
