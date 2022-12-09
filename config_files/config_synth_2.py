@@ -24,10 +24,10 @@ time_steps_to_record_profile = ()
 #######
 ###file names and paths
 ###this will be the path and name of the output file which contains the fluxes for each time step
-output_file_name_fluxes = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/outputs/output_synth_2.pkl'
+output_file_name_fluxes = '/Users/peterlafollette/Desktop/LGAR-Py/outputs/output_synth_2.pkl'
 
 ###this is the path of the directory that contains the forcing data
-forcing_data_folder = '~/desktop/alt-modular/Modules/GAR/LGAR_BMI/forcing_data_files/synth_2/'
+forcing_data_folder = '~/desktop/LGAR-Py/forcing_data_files/synth_2/'
 
 ###this is the name of the raw, unformatted forcing data file
 raw_forcing_data_file_name = 'forcing_data_synth_2_raw.csv'
@@ -36,10 +36,10 @@ raw_forcing_data_file_name = 'forcing_data_synth_2_raw.csv'
 formatted_forcing_data_name = 'forcing_data_resampled_synth_2.csv'
 
 ###this is the path and name of the parameters file
-params_file = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/parameter_files/params_synth_2.py'
+params_file = '/Users/peterlafollette/Desktop/LGAR-Py/parameter_files/params_synth_2.py'
 
 ###this is the path and name of the file the reformats raw forcing data
-forcing_data_formatter_file = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/forcing_data_files/synth_2/forcing_data_formatter_synth_2.py'
+forcing_data_formatter_file = '/Users/peterlafollette/Desktop/LGAR-Py/forcing_data_files/synth_2/forcing_data_formatter_synth_2.py'
 #######
 
 

@@ -19,6 +19,7 @@ time_steps_to_record_profile = ()
 ###in the event that you want to record soil moisture profiles for each time step, please either manually enter the time steps you want recorded, or use the np.array code to record all time steps.
 # time_steps_to_record_profile = (100,200,300)
 # import numpy as np
+# time_steps_to_record_profile = np.array(range(0,length_of_simulation+1))
 
 #######
 
@@ -29,10 +30,10 @@ time_steps_to_record_profile = ()
 #######
 ###file names and paths
 ###this will be the path and name of the output file which contains the fluxes for each time step
-output_file_name_fluxes = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/outputs/output_Bushland.pkl'
+output_file_name_fluxes = '/Users/peterlafollette/Desktop/LGAR-Py/outputs/output_Bushland.pkl'
 
 ###this is the path of the directory that contains the forcing data
-forcing_data_folder = '~/desktop/alt-modular/Modules/GAR/LGAR_BMI/forcing_data_files/Bushland/'
+forcing_data_folder = '~/desktop/LGAR-Py/forcing_data_files/Bushland/'
 
 ###this is the name of the raw, unformatted forcing data file
 raw_forcing_data_file_name = 'forcing_data_Bushland_raw.csv'
@@ -41,10 +42,10 @@ raw_forcing_data_file_name = 'forcing_data_Bushland_raw.csv'
 formatted_forcing_data_name = 'forcing_data_resampled_Bushland.csv'
 
 ###this is the path and name of the parameters file
-params_file = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/parameter_files/params_Bushland.py'
+params_file = '/Users/peterlafollette/Desktop/LGAR-Py/parameter_files/params_Bushland.py'
 
 ###this is the path and name of the file the reformats raw forcing data
-forcing_data_formatter_file = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/forcing_data_files/Bushland/forcing_data_formatter_Bushland.py'
+forcing_data_formatter_file = '/Users/peterlafollette/Desktop/LGAR-Py/forcing_data_files/Bushland/forcing_data_formatter_Bushland.py'
 #######
 
 

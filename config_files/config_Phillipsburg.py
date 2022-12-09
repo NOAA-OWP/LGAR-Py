@@ -10,14 +10,15 @@ initial_psi = 20000 #The initial capillary head (mm) set everywhere in the soil.
 
 verbose = True #prints many model state, fluxes, and other interesting quantities if set to True
 
-length_of_simulation = 66205#90001 #This is the length of the simulation, in time steps. #105090 #66205 #31202
+length_of_simulation = 90001 #This is the length of the simulation, in time steps. #105090 #66205 #31202
 
 #by default, the LGAR model does not save soil moisture profiles. This is achieved with the following line.
-time_steps_to_record_profile = (66182,66204)
+time_steps_to_record_profile = ()
 
 ###in the event that you want to record soil moisture profiles for each time step, please either manually enter the time steps you want recorded, or use the np.array code to record all time steps.
 # time_steps_to_record_profile = (100,200,300)
 # import numpy as np
+# time_steps_to_record_profile = np.array(range(0,length_of_simulation+1))
 
 #######
 
@@ -27,10 +28,10 @@ time_steps_to_record_profile = (66182,66204)
 #######
 ###file names and paths
 ###this will be the path and name of the output file which contains the fluxes for each time step
-output_file_name_fluxes = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/outputs/output_Phillipsburg.pkl'
+output_file_name_fluxes = '/Users/peterlafollette/Desktop/LGAR-Py/outputs/output_Phillipsburg.pkl'
 
 ###this is the path of the directory that contains the forcing data
-forcing_data_folder = '~/desktop/alt-modular/Modules/GAR/LGAR_BMI/forcing_data_files/Phillipsburg/'
+forcing_data_folder = '~/desktop/LGAR-Py/forcing_data_files/Phillipsburg/'
 
 ###this is the name of the raw, unformatted forcing data file
 raw_forcing_data_file_name = 'forcing_data_Phillipsburg_raw.csv'
@@ -39,10 +40,10 @@ raw_forcing_data_file_name = 'forcing_data_Phillipsburg_raw.csv'
 formatted_forcing_data_name = 'forcing_data_resampled_Phillipsburg.csv'
 
 ###this is the path and name of the parameters file
-params_file = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/parameter_files/params_Phillipsburg.py'
+params_file = '/Users/peterlafollette/Desktop/LGAR-Py/parameter_files/params_Phillipsburg.py'
 
 ###this is the path and name of the file the reformats raw forcing data
-forcing_data_formatter_file = '/Users/peterlafollette/Desktop/alt-modular/Modules/GAR/LGAR_BMI/forcing_data_files/Phillipsburg/forcing_data_formatter_Phillipsburg.py'
+forcing_data_formatter_file = '/Users/peterlafollette/Desktop/LGAR-Py/forcing_data_files/Phillipsburg/forcing_data_formatter_Phillipsburg.py'
 #######
 
 
