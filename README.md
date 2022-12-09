@@ -6,7 +6,7 @@
 
 Other things to include:
 
-  - **Status**:  As of this writing (21 September 2022), this model will soon be submitted to WRR.
+  - **Status**:  A manuscript describing LGAR was submitted to WRR in October 2022.
   - **Links to production or demo instances** Animations of LGAR simulations can be found at: https://www.hydroshare.org/resource/46747d77d0ce4995b1e1d58384e15a09/
 
 
@@ -16,24 +16,54 @@ This project requires Python 3.
 
 ## Usage
 
-In order to successfully run the LGAR model, the config file must be filled out correctly, and the correct files must be present in the parameter_files, forcing_data_files, and config_files folders. These components are described here.
-
-In the config file for a given LGAR model run, "output_file_name_fluxes" is the file path and name of the output file, which will contain fluxes per time step, cumulative fluxes, forcing data, and mass balance calculations.
-
-"forcing_data_folder" is the path that contains the relevant forcing data files for the model run.
-
-"raw_forcing_data_file_name" is the name of the raw, unformatted forcing data file.
-
-"formatted_forcing_data_name" will be the name of the output, correctly resampled and formatted csv file that LGAR saves to the disk. While this is not necessary for the model to run per se, it is useful to have the reformatted forcing data saved.
-
-"params_file" is the path and name of the parameters file to be used with the model.
-
-"forcing_data_formatter_file" is the path and name of the .py file that converts the raw forcing data file to a format that is usable by LGAR.
+In order to successfully run the LGAR model, the config file must be filled out correctly, and the correct files must be present in the parameter_files, forcing_data_files, and config_files folders.
 
 
-The model will run correctly if these variable names are filled out in the config file, and if the files occur in the correct places. LGAR also requires the files LGAR_compute.py, test_env.py, and BMI_base_class.py, to be in the same directory. In order to run LGAR, ensure that the correct config file is indicated in test_env.py, and then navigate in a terminal to the directory containing these files and run "python test_env.py".
+Config file contents
+
+The contents of the first two blocks of the config file for a model run are described here.
+
+First block:
+
+time_step: this is the model time step, expressed in hours. It defaults to a value of 300/3600, or 5 minutes expressed in hours.
+
+initial_psi: this is the uniform capillary head throughout the model domain expressed in mm. Note that LGAR uses absolute values for capillary head, such that a value of 20000 mm for initial_psi physically represents soil with a capillary head of -20000 mm.
+
+verbose: this can be True or False, where no output is printed to the screen during a model run if it is False.
+
+Second block:
+
+output_file_name_fluxes: this will be the path and name of the output file which contains the fluxes for each time step of the simulation
+
+params_file: this is the path and name of the parameters file
+
+forcing_data_file: this is the forcing data file that is in the correct format for LGAR-Py
+
+
+parameter_files
+
+Each parameter file, in the parameter_files folder, only has to be edited in the first block, which contains options related to soil hydraulic parameters, number of layers, maximum ponded head, and options related to the PET -> AET correction.
+
+
+forcing_data_files
+
+This folder contains sub folders for each model run. All that is necessary to run LGAR is correctly formatted forcing data as a .csv. Raw USDA SCAN data and notebooks that convert these raw data to the format usable by LGAR are also provided.
+
+
+LGAR also requires the files LGAR_compute.py, test_env.py, and BMI_base_class.py, to be in the same directory.
 
 The Jupyter notebooks (in vis_files) are useful for visualization of results. HYDRUS_files contains HYDRUS-1D model runs which are set up to simulate the same soil hydraulic conditions and forcing data as various LGAR runs.
+
+
+## Build instructions
+git clone https://github.com/NOAA-OWP/LGAR-Py -b LGAR-Py_public
+
+
+## Running the model
+
+In order to run LGAR, ensure that the correct config file is indicated in test_env.py, and then navigate in a terminal to the directory containing test_env.py and enter "python test_env.py".
+
+
 
 ## How to test the software
 
