@@ -1,5 +1,6 @@
 ###this is the config file for the LGAR model
 
+###In the config file, the user has to make the following two blocks contain the correct information. The first block, model run options, contains options related to the simulation. the second block, file names and paths, has to contain the desired input and output file names and paths. The third and final block does not have to be changed.
 
 
 #######
@@ -47,6 +48,8 @@ params_file = '/Users/peterlafollette/Desktop/LGAR-Py/parameter_files/params_Bus
 ###this is the path and name of the file the reformats raw forcing data
 forcing_data_formatter_file = '/Users/peterlafollette/Desktop/LGAR-Py/forcing_data_files/Bushland/forcing_data_formatter_Bushland.py'
 #######
+
+
 
 
 

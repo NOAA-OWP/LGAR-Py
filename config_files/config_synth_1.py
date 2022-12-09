@@ -1,5 +1,7 @@
 ###this is the config file for the LGAR model
 
+###In the config file, the user has to make the following two blocks contain the correct information. The first block, model run options, contains options related to the simulation. the second block, file names and paths, has to contain the desired input and output file names and paths. The third and final block does not have to be changed.
+
 #######
 ### model run options
 
