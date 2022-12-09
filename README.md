@@ -16,7 +16,7 @@ This project requires Python 3.
 
 In order to successfully run the LGAR model, the config file must be filled out correctly, and the correct files must be present in the parameter_files, forcing_data_files, and config_files folders.
 
-\\
+\
 
 **Config file contents**
 
