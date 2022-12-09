@@ -4,7 +4,7 @@ forcing_data_folder = '~/desktop/LGAR-py/forcing_data_files/synth_3/' #This is t
 raw_forcing_data_file_name = 'forcing_data_synth_3_raw.csv' #This is the input (raw) USDA SCAN forcing dataset.
 formatted_forcing_data_name = 'forcing_data_resampled_synth_3.csv' #this will be the name of the output forcing data, in the correct format for LGAR-Py.
 time_step_formatting = 300/3600 #this is the output time step of the resampled forcing data, expressed in hours. The default value of 300/3600 is 5 minutes expressed in hours.
-
+#test
 
 
 
