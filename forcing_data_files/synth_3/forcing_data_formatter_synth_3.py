@@ -1,5 +1,20 @@
-def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_forcing_data_name,freq):
+###This .py file reformats raw USDA SCAN data to the format used by LGAR-Py.
+###only the following 4 lines should be changed by the user
+forcing_data_folder = '~/desktop/LGAR-py/forcing_data_files/synth_3/' #This is the location of both the raw and reformatted forcing datasets.
+raw_forcing_data_file_name = 'forcing_data_synth_3_raw.csv' #This is the input (raw) USDA SCAN forcing dataset.
+formatted_forcing_data_name = 'forcing_data_resampled_synth_3.csv' #this will be the name of the output forcing data, in the correct format for LGAR-Py.
+time_step_formatting = 300/3600 #this is the output time step of the resampled forcing data, expressed in hours. The default value of 300/3600 is 5 minutes expressed in hours.
 
+
+
+
+
+
+
+
+
+
+def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_forcing_data_name,freq):
 
     import pandas as pd
     import numpy as np
@@ -213,6 +228,7 @@ def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_
 
 
     forcing_data = forcing_data.filter(['P(mm/h)', 'PET(mm/h)'])
+    forcing_data.to_csv(path_string + formatted_forcing_data_name) #this is for saving forcing data / sending to HYDRUS
     return(forcing_data)
-    #
-    #forcing_data.to_csv('forcing_data_resampled.csv') #this is for saving forcing data / sending to HYDRUS
+
+forcing_data_formatter_fxn(path_string=forcing_data_folder, raw_forcing_data_file_name=raw_forcing_data_file_name, formatted_forcing_data_name=formatted_forcing_data_name,freq=time_step_formatting)

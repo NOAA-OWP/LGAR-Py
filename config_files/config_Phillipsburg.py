@@ -27,39 +27,37 @@ time_steps_to_record_profile = ()
 
 
 
+
+
+
+
 #######
 ###file names and paths
 ###this will be the path and name of the output file which contains the fluxes for each time step
 output_file_name_fluxes = '/Users/peterlafollette/Desktop/LGAR-Py/outputs/output_Phillipsburg.pkl'
 
-###this is the path of the directory that contains the forcing data
-forcing_data_folder = '~/desktop/LGAR-Py/forcing_data_files/Phillipsburg/'
-
-###this is the name of the raw, unformatted forcing data file
-raw_forcing_data_file_name = 'forcing_data_Phillipsburg_raw.csv'
-
-###this is the name of the resampled, correctly formatted forcing data file that is output by the forcing data reformatter
-formatted_forcing_data_name = 'forcing_data_resampled_Phillipsburg.csv'
-
 ###this is the path and name of the parameters file
 params_file = '/Users/peterlafollette/Desktop/LGAR-Py/parameter_files/params_Phillipsburg.py'
 
-###this is the path and name of the file the reformats raw forcing data
-forcing_data_formatter_file = '/Users/peterlafollette/Desktop/LGAR-Py/forcing_data_files/Phillipsburg/forcing_data_formatter_Phillipsburg.py'
+###this is the forcing data file that is in the correct format for LGAR-Py
+forcing_data_file = '/Users/peterlafollette/Desktop/LGAR-py/forcing_data_files/Phillipsburg/forcing_data_resampled_Phillipsburg.csv'
 #######
+
+
+
+
+
+
+
 
 
 
 
 #######
 ###code that loads forcing data and params
+import pandas as pd
 import importlib.util
-forcing_data_formatter = importlib.util.spec_from_file_location("forcing_data_formatter", forcing_data_formatter_file)
-foo = importlib.util.module_from_spec(forcing_data_formatter)
-forcing_data_formatter.loader.exec_module(foo)
-forcing_data_formatter = foo
-forcing_data_file = forcing_data_formatter
-forcing_data = forcing_data_formatter.forcing_data_formatter_fxn(path_string=forcing_data_folder, raw_forcing_data_file_name=raw_forcing_data_file_name, formatted_forcing_data_name=formatted_forcing_data_name,freq=time_step)
+forcing_data = pd.read_csv(forcing_data_file,index_col=0)
 
 params = importlib.util.spec_from_file_location("params", params_file)
 foo = importlib.util.module_from_spec(params)

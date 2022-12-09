@@ -25,38 +25,29 @@ time_steps_to_record_profile = ()
 
 
 
+
+
 #######
 ###file names and paths
 ###this will be the path and name of the output file which contains the fluxes for each time step
 output_file_name_fluxes = '/Users/peterlafollette/Desktop/LGAR-py/outputs/output_Fort_Assiniboine.pkl'
 
-###this is the path of the directory that contains the forcing data
-forcing_data_folder = '~/desktop/LGAR-py/forcing_data_files/Fort_Assiniboine/'
-
-###this is the name of the raw, unformatted forcing data file
-raw_forcing_data_file_name = 'forcing_data_Fort_Assiniboine_raw.csv'
-
-###this is the name of the resampled, correctly formatted forcing data file that is output by the forcing data reformatter
-formatted_forcing_data_name = 'forcing_data_resampled_Fort_Assiniboine.csv'
-
 ###this is the path and name of the parameters file
 params_file = '/Users/peterlafollette/Desktop/LGAR-py/parameter_files/params_Fort_Assiniboine.py'
 
-###this is the path and name of the file the reformats raw forcing data
-forcing_data_formatter_file = '/Users/peterlafollette/Desktop/LGAR-py/forcing_data_files/Fort_Assiniboine/forcing_data_formatter_Fort_Assiniboine.py'
+###this is the forcing data file that is in the correct format for LGAR-Py
+forcing_data_file = '/Users/peterlafollette/Desktop/LGAR-py/forcing_data_files/Fort_Assiniboine/forcing_data_resampled_Fort_Assiniboine.csv'
 #######
+
+
 
 
 
 #######
 ###code that loads forcing data and params
 import importlib.util
-forcing_data_formatter = importlib.util.spec_from_file_location("forcing_data_formatter", forcing_data_formatter_file)
-foo = importlib.util.module_from_spec(forcing_data_formatter)
-forcing_data_formatter.loader.exec_module(foo)
-forcing_data_formatter = foo
-forcing_data_file = forcing_data_formatter
-forcing_data = forcing_data_formatter.forcing_data_formatter_fxn(path_string=forcing_data_folder, raw_forcing_data_file_name=raw_forcing_data_file_name, formatted_forcing_data_name=formatted_forcing_data_name,freq=time_step)
+import pandas as pd
+forcing_data = pd.read_csv(forcing_data_file,index_col=0)
 
 params = importlib.util.spec_from_file_location("params", params_file)
 foo = importlib.util.module_from_spec(params)

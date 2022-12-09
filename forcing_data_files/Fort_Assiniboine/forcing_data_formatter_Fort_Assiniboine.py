@@ -1,25 +1,22 @@
+###This .py file reformats raw USDA SCAN data to the format used by LGAR-Py.
+###only the following 4 lines should be changed by the user
+forcing_data_folder = '~/desktop/LGAR-py/forcing_data_files/Fort_Assiniboine/' #This is the location of both the raw and reformatted forcing datasets.
+raw_forcing_data_file_name = 'forcing_data_Fort_Assiniboine_raw.csv' #This is the input (raw) USDA SCAN forcing dataset.
+formatted_forcing_data_name = 'forcing_data_resampled_Fort_Assiniboine.csv' #this will be the name of the output forcing data, in the correct format for LGAR-Py.
+time_step_formatting = 300/3600 #this is the output time step of the resampled forcing data, expressed in hours. The default value of 300/3600 is 5 minutes expressed in hours.
+
+
+
+
+
+
 def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_forcing_data_name,freq):
 
     import pandas as pd
     import numpy as np
 
-    # import sys
-    # from test_env import folder_name
-    # sys.path.insert(0, folder_name)
-    # from config import raw_csv_data_string
-    # raw_forcing_data_file_string = folder_name + '/' + raw_csv_data_string
-    #
-    # #forcing_data = pd.read_csv("forcing_data_Panama_raw.csv",header=0, delim_whitespace=True)
-    # forcing_data = pd.read_csv(raw_forcing_data_file_string,header=0, delimiter=',')
-
-
-    #forcing_data = pd.read_csv("forcing_data/Lehman_data/Lehman_data.csv",header=0, delimiter=',')
-    #forcing_data = pd.read_csv("forcing_data/Sidney_data/Sidney_data.csv",header=0, delimiter=',')
-
     raw_forcing_data_file_string = path_string + raw_forcing_data_file_name
     forcing_data = pd.read_csv(raw_forcing_data_file_string,header=0, delimiter=',')
-
-
 
     alpha = 1.3
     rho_w = 1000
@@ -48,28 +45,6 @@ def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_
         return( (F - 32) * 5.0/9.0 )
 
 
-
-
-    ###not quite sure of the following is correct - anyway fine to use Priestly-Taylor for now. If someone wants to provide a more sophisticated ET representation, they can. Also I might do that if I want to compare to soil moisture observations
-    # z_0 = 0.05 #roughness height in m for this site
-    # z_0 = 0.03/100
-
-    # def B(u_2,z_2):
-    #     return(0.1169e-9*u_2/(np.log(z_2/z_0))**2)
-
-    # def e_a(R_h,T):
-    #     return(R_h*e_s(T))
-
-    # def E_rad(R_n,T):
-    #     return(E_r(R_n,T)*delta(T)/(delta(T)+gamma(T))) #no alpha
-
-    # def E_a(R_h,u_2,z_2,T):
-    #     return(B(u_2,z_2)*(e_s(T)-e_a(R_h,T)))
-
-    # def E_aero(R_h,u_2,z_2,T):
-    #     return(E_a(R_h,u_2,z_2,T)*gamma(T)/(delta(T)+gamma(T))/(1))
-
-
     PET_vec = []
     precip_vec = []
 
@@ -91,206 +66,12 @@ def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_
     resampling_frequency = str(int(freq*3600))+'S'
     forcing_data = forcing_data.resample(resampling_frequency).interpolate()
 
-    # ##########
-    # #this creates synthetic forcing data for testing or concept visualization purposes
-    # #for i in range(0,len(forcing_data)):
-    #
-    # #for i in range(0,90000):
-    # for i in range(0,10000):
-    #     forcing_data['P(mm/h)'][i] = forcing_data['P(mm/h)'][i]*0
-    #     forcing_data['PET(mm/h)'][i] = forcing_data['PET(mm/h)'][i]*0
-    #
-    # precip_number = 8
-    #
-    # for i in range(0,10):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(10,20):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(20,30):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(30,40):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(40,50):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(50,60):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(60,70):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(70,80):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(80,90):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(90,100):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(100,110):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(110,120):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(120,130):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(130,140):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(140,150):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(150,160):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(160,170):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(170,180):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(180,190):
-    #     forcing_data['P(mm/h)'][i] = precip_number
-    # for i in range(190,200):
-    #     forcing_data['P(mm/h)'][i] = 0
-    # for i in range(200,210):
-    #     forcing_data['P(mm/h)'][i] = 0
-    #
-    # for i in range(200,400):
-    #     forcing_data['P(mm/h)'][i]=0
-    #
-    # for i in range(400,600):
-    #     forcing_data['P(mm/h)'][i]=forcing_data['P(mm/h)'][i-400]
-    #
-    # for i in range(600,800):
-    #     forcing_data['P(mm/h)'][i]=0
-    #
-    # for i in range(800,1000):
-    #     forcing_data['P(mm/h)'][i]=forcing_data['P(mm/h)'][i-800]
-    #
-    # # for i in range(400,410):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(410,420):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(420,430):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(430,440):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(440,450):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(450,460):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(460,470):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(470,480):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(480,490):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(490,500):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(500,510):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(510,520):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(520,530):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(530,540):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(540,550):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(550,560):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(560,570):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(570,580):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(580,590):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(590,600):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(600,610):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    #
-    # # for i in range(0,200):
-    # #     forcing_data['P(mm/h)'][i]=forcing_data['P(mm/h)'][i+400]
-    # #
-    # # for i in range(400,600):
-    # #     forcing_data['P(mm/h)'][i]=forcing_data['P(mm/h)'][i+400]
-    #
-    #
-    #
-    #
-    #
-    # #
-    # # for i in range(0,50):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(10,20):
-    # #     forcing_data['P(mm/h)'][i] = 10
-    # # for i in range(50,100):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(100,150):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*0
-    # # for i in range(150,200):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*0
-    # # for i in range(200,250):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*0
-    # # for i in range(250,300):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(300,350):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*3
-    # # for i in range(350,400):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*3
-    # # for i in range(400,450):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*3
-    # # for i in range(450,500):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(500,550):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*0
-    # # for i in range(550,600):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*0
-    # # for i in range(600,650):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*0
-    # # for i in range(650,700):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(700,750):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*3
-    # # for i in range(750,800):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*3
-    # # for i in range(800,850):
-    # #     forcing_data['P(mm/h)'][i] = precip_number*3
-    # # for i in range(850,900):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(900,950):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(950,1000):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(1000,1050):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(1050,1100):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(1100,1150):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(1150,1200):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(1200,1250):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(1250,1300):
-    # #     forcing_data['P(mm/h)'][i] = 0
-    # # for i in range(1300,1350):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(1350,1400):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    # # for i in range(1400,1450):
-    # #     forcing_data['P(mm/h)'][i] = precip_number
-    #
-    #
-    # # def sinusoidal_synthetic_PET(step):
-    # #     result = -0.4*np.cos(2*np.pi/288*step)
-    # #     if result<0:
-    # #         result = 0
-    # #     return(result)
-    # #
-    # # for i in range(0,1500):
-    # #     forcing_data['PET(mm/h)'][i] = sinusoidal_synthetic_PET(i)
-    # #
-    # #########
-
-
-
-
-
 
     forcing_data = forcing_data.filter(['P(mm/h)', 'PET(mm/h)'])
     #
     forcing_data.to_csv(path_string + formatted_forcing_data_name) #this is for saving forcing data / sending to HYDRUS
 
     return(forcing_data)
+
+
+forcing_data_formatter_fxn(path_string=forcing_data_folder, raw_forcing_data_file_name=raw_forcing_data_file_name, formatted_forcing_data_name=formatted_forcing_data_name,freq=time_step_formatting)
