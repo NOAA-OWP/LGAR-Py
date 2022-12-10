@@ -46,7 +46,7 @@ Each parameter file, in the parameter_files folder, only has to be edited in the
 
 ## forcing_data_files
 
-This folder contains sub folders for each model run. All that is necessary to run LGAR is correctly formatted forcing data as a .csv. Raw USDA SCAN data and notebooks that convert these raw data to the format usable by LGAR are also provided.
+This folder contains sub folders for each model run. All that is necessary to run LGAR is correctly formatted forcing data as a .csv. Raw USDA SCAN data and notebooks that convert these raw data to the format usable by LGAR are also provided. Currently, it is necessary that the forcing data resolution is the same as time_step as specified in the config file. 
 
 ## other useful files
 
