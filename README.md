@@ -2,6 +2,8 @@
 
 # Layered Green & Ampt with redistribution (LGAR) in python
 
+contact: peter.lafollette@noaa.gov, plafollette@lynker.com 
+
 **Description**:  LGAR is a model which partitions precipitation into infiltration and runoff, and is designed for use in arid or semi arid climates. LGAR's main selling point is that it closely mimics precipitation partitioning results as simulated by the Richards / Richardson equation (RRE), without the inherent reliability and stability challenges the RRE poses. Therefore, this model is useful when accurate, stable precipitation partitioning simulations are desired in arid or semi arid areas. LGAR as implemented in Python is BMI compatible. LGAR is currently being developed in C as well.
 
   - **Status**:  A manuscript describing LGAR was submitted to WRR in October 2022.
@@ -46,7 +48,7 @@ Each parameter file, in the parameter_files folder, only has to be edited in the
 
 ## forcing_data_files
 
-This folder contains sub folders for each model run. All that is necessary to run LGAR is correctly formatted forcing data as a .csv. Raw USDA SCAN data and notebooks that convert these raw data to the format usable by LGAR are also provided. Currently, it is necessary that the forcing data resolution is the same as time_step as specified in the config file. 
+This folder contains sub folders for each model run. All that is necessary to run LGAR is correctly formatted forcing data as a .csv. Raw USDA SCAN data and notebooks that convert these raw data to the format usable by LGAR are also provided. Currently, it is necessary that the forcing data resolution is the same as time_step as specified in the config file.
 
 ## other useful files
 
