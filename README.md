@@ -2,7 +2,7 @@
 
 # Layered Green & Ampt with redistribution (LGAR) in python
 
-contact: peter.lafollette@noaa.gov, plafollette@lynker.com 
+contact: peter.lafollette@noaa.gov, plafollette@lynker.com
 
 **Description**:  LGAR is a model which partitions precipitation into infiltration and runoff, and is designed for use in arid or semi arid climates. LGAR's main selling point is that it closely mimics precipitation partitioning results as simulated by the Richards / Richardson equation (RRE), without the inherent reliability and stability challenges the RRE poses. Therefore, this model is useful when accurate, stable precipitation partitioning simulations are desired in arid or semi arid areas. LGAR as implemented in Python is BMI compatible. LGAR is currently being developed in C as well.
 
@@ -31,6 +31,10 @@ time_step: this is the model time step, expressed in hours. It defaults to a val
 initial_psi: this is the uniform capillary head throughout the model domain expressed in mm. Note that LGAR uses absolute values for capillary head, such that a value of 20000 mm for initial_psi physically represents soil with a capillary head of -20000 mm.
 
 verbose: this can be True or False, where no output is printed to the screen during a model run if it is False.
+
+length_of_simulation: This is the length of the simulation, in time steps.
+
+closed_form_capillary_drive_term: set to True or False. This determines if the capillary drive term G is calculated with the numeric integral of hydraulic conductivity with respect to capillary head, or if the equivalence relations between van Genuchten and Brooks - Corey hydraulic models is used to achieve an approximate, closed form equation for G. Setting this value to True generally significantly increases the speed while insignificantly altering model results.  
 
 Second block:
 

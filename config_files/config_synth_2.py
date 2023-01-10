@@ -13,6 +13,8 @@ verbose = True #prints many model state, fluxes, and other interesting quantitie
 
 length_of_simulation = 144 #This is the length of the simulation, in time steps.
 
+closed_form_capillary_drive_term = False
+
 #by default, the LGAR model does not save soil moisture profiles. This is achieved with the following line.
 time_steps_to_record_profile = ()
 

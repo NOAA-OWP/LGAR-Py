@@ -65,6 +65,20 @@ def capital_theta_of_psi(psi,alpha,n,m): #relative water content [unitless], bas
 #it uses the trapezoidal rule for integration with a default number of trapezoids of 20.
 #using a smaller number will result in a less precise value for G but will improve computation time. So far testing has suggested that you shouldn't go below 20.
 #finally as of ~February 2022, Scott Peckham has been working on a closed form for G. If successful, this should take ~30% off the runtime of LGAR.
+
+
+def G_closed(theta_upper_lim,theta_lower_lim,psi_b,lambdaa,theta_r,theta_s):
+    H_c = psi_b*((2+3*lambdaa)/(1+3*lambdaa))
+    capital_theta_current = capital_theta(theta_upper_lim,theta_r,theta_s)
+    capital_theta_below = capital_theta(theta_lower_lim,theta_r,theta_s)
+    try:
+        G_result = H_c*(capital_theta_current**(3+1/lambdaa)-capital_theta_below**(3+1/lambdaa))/(1-capital_theta_below**(3+1/lambdaa))
+    except:
+        G_result = H_c
+    return(G_result)
+
+
+
 def G(psi_upper_lim, psi_lower_lim, alpha, n, m, K_s, num_trapezoids=120):#120 seems to be a good value for num_trapezoids
     if (psi_upper_lim==psi_lower_lim):
         return(0)
@@ -343,7 +357,20 @@ class LGAR(BMI.base_BMI):
 
                     if (layer_number == 0): #currently, LGAR works with exactly 3 layers (which can be set to have the same properties). Derivatives have different forms for wetting fronts in different layers, as moisture in above layers must be considered for wetting fronts in deeper layers. Therefore dZdt calculations look similar between layers, albeit there are more terms in parts of dZdt for deeper layers. Eventually this will probably be replaced with code that generally calculates dZdt based on what layer the wetting front is in.
                         K_temp = K(capital_theta(theta, theta_r, theta_s), K_s, m) #hydraulic conductivity based on van Genuchten parameters and theta
-                        G_temp = G(psi_of_theta(theta, theta_s, theta_r, n, m, alpha), psi_of_theta(theta_below, theta_s, theta_r, n,m,alpha), alpha, n, m, K_s) #capillary suction the wetting front experiences, which is in part controlled by the theta value of the wetting front below the current one, where the wetting front below will be in the same layer as the current wetting front
+                        psi_b = self.psi_b_vec[layer_number]
+                        lambdaa = self.lambda_vec[layer_number]
+                        if self.closed_form_capillary_drive_term:
+                            G_temp = G_closed(theta,theta_below,psi_b,lambdaa,theta_r,theta_s)
+                        else:
+                            G_temp = G(psi_of_theta(theta, theta_s, theta_r, n, m, alpha), psi_of_theta(theta_below, theta_s, theta_r, n,m,alpha), alpha, n, m, K_s) #capillary suction the wetting front experiences, which is in part controlled by the theta value of the wetting front below the current one, where the wetting front below will be in the same layer as the current wetting front
+
+                        #print('G_temp closed form:')
+                        #print(G_temp)
+                        ###testing closed form G by commenting out line below and including 3 lines above
+                        #G_temp = G(psi_of_theta(theta, theta_s, theta_r, n, m, alpha), psi_of_theta(theta_below, theta_s, theta_r, n,m,alpha), alpha, n, m, K_s) #capillary suction the wetting front experiences, which is in part controlled by the theta value of the wetting front below the current one, where the wetting front below will be in the same layer as the current wetting front
+                        #print('G_temp integrated:')
+                        #print(G_temp)
+                        #1/0
                         f_temp = [1/abs(theta-theta_below)*(K_temp+K_s*(G_temp+h_p)/Z)#, #f_temp contains the derivatives, dZdt and dthetadt, for the wetting front, and will be appended to f. again, dZdt is calculated but dthetadt is set to 0 and theta is later calculated via mass balance
                                     #(1/abs(theta-theta_below))*(K_temp+(K_temp-K_temp_below)*(G_temp+h_p)/Z)
                                   #0
@@ -355,7 +382,13 @@ class LGAR(BMI.base_BMI):
 
                     if (layer_number > 0):
                         K_temp = K(capital_theta(theta, theta_r, theta_s), K_s, m)
-                        G_temp = G(psi_of_theta(theta, theta_s, theta_r, n, m, alpha), psi_of_theta(theta_below, theta_s, theta_r, n,m,alpha), alpha, n, m, K_s)
+                        psi_b = self.psi_b_vec[layer_number]
+                        lambdaa = self.lambda_vec[layer_number]
+                        if self.closed_form_capillary_drive_term:
+                            G_temp = G_closed(theta,theta_below,psi_b,lambdaa,theta_r,theta_s)
+                        else:
+                            G_temp = G(psi_of_theta(theta, theta_s, theta_r, n, m, alpha), psi_of_theta(theta_below, theta_s, theta_r, n,m,alpha), alpha, n, m, K_s)
+
                         psi_current = psi_of_theta(theta, theta_s, theta_r, n, m, alpha) #psi is the hydraulic head. One of the central ideas of LGAR is that wetting fronts in deeper layers extend upwards to layers above, but with the same psi value (hydraulic head) rather than the same theta value. So, the same "wetting front" in terms of psi extends between multiple layers (whereas the LGAR code tracks distinct depth,theta pairs, so a wetting front going between 2 soil layers with a single psi value is represented in LGAR as 2 wetting fronts with different theta values but the same psi value). Anyway, the theta value curresponding to the wetting fornt's psi value is necessary for dZdt, so psi is calculated here and is then used to find the theta value in the layer above corresponding to this wetting front.
                         capital_theta_above_vec = []
                         K_above_vec = []
@@ -367,13 +400,26 @@ class LGAR(BMI.base_BMI):
                             #K_above_vec.append(K_temp_above)
                             K_above_vec = [K_temp_above] + K_above_vec #adds K_temp_above to start of list
                         Z_above = sum(max_depth_vec[0:layer_number])
+
+                        #####3 jan 2023: trying new f_p and dZdt formulation
+                        # sum_of_thickness_over_conductivity_terms = 0
+                        # for k in range(0,(len(K_above_vec))):
+                        #     sum_of_thickness_over_conductivity_terms = sum_of_thickness_over_conductivity_terms + max_depth_vec[k]/K_above_vec[k]
+                        # f_temp = [(1/abs(theta-theta_below))*(Z+Z_above+(G_temp+h_p)*K_s/K_temp)*(1/(sum_of_thickness_over_conductivity_terms+Z/K_temp))#, #was 0
+                        #             #(1/abs(theta-theta_below))*(Z+Z_above+(G_temp+h_p)*(K_temp-K_temp_below)/K_temp)*(1/(max_depth_vec[0]/K_temp_2_above+max_depth_vec[1]/K_temp_above+Z/K_temp))
+                        #           #0
+                        #           ]
                         sum_of_thickness_over_conductivity_terms = 0
+                        #sum_of_thickness_over_conductivity_terms_K_s = 0
                         for k in range(0,(len(K_above_vec))):
                             sum_of_thickness_over_conductivity_terms = sum_of_thickness_over_conductivity_terms + max_depth_vec[k]/K_above_vec[k]
-                        f_temp = [(1/abs(theta-theta_below))*(Z+Z_above+(G_temp+h_p)*K_s/K_temp)*(1/(sum_of_thickness_over_conductivity_terms+Z/K_temp))#, #was 0
-                                    #(1/abs(theta-theta_below))*(Z+Z_above+(G_temp+h_p)*(K_temp-K_temp_below)/K_temp)*(1/(max_depth_vec[0]/K_temp_2_above+max_depth_vec[1]/K_temp_above+Z/K_temp))
-                                  #0
-                                  ]
+                            #sum_of_thickness_over_conductivity_terms_K_s = sum_of_thickness_over_conductivity_terms_K_s + max_depth_vec[k]/K_s_vec[k]
+                        sum_of_thickness_over_conductivity_terms = sum_of_thickness_over_conductivity_terms + Z/K_temp
+                        #sum_of_thickness_over_conductivity_terms_K_s = sum_of_thickness_over_conductivity_terms_K_s + Z/K_s
+                        K_composite = (Z+Z_above)/sum_of_thickness_over_conductivity_terms
+                        #K_s_composite = (Z+Z_above)/sum_of_thickness_over_conductivity_terms_K_s
+                        f_temp = [K_s*G_temp/(Z+Z_above)+K_composite]
+
                         f.append(f_temp)
 
 
@@ -485,6 +531,7 @@ class LGAR(BMI.base_BMI):
 
     #for i in (range(0,1)):
     def run_model(self,length_of_simulation):
+
         derivs = self.derivs
 
         precip_data = self.precip_data
@@ -493,6 +540,7 @@ class LGAR(BMI.base_BMI):
         config = self.config
         params = config.params
         parameters = params.parameters
+        self.closed_form_capillary_drive_term = config.closed_form_capillary_drive_term
 
         theta_r_vec   = params.theta_r_vec
         theta_s_vec   = params.theta_s_vec
@@ -508,6 +556,14 @@ class LGAR(BMI.base_BMI):
         time_steps_to_record_profile = config.time_steps_to_record_profile
 
         time_step = config.time_step
+
+        self.lambda_vec = []
+        self.psi_b_vec = []
+
+        for u in range(0,len(theta_r_vec)):
+            p=1+2/m_vec[u]
+            self.lambda_vec.append(2/(p-3))
+            self.psi_b_vec.append( (p+3)*(147.8+8.1*p+0.092*p**2) / (2*alpha_vec[u]*p*(p-1)*(55.6+7.4*p+p**2)) )
 
 
 
@@ -683,7 +739,14 @@ class LGAR(BMI.base_BMI):
                         else:
                             wf_below_free_drainage_one = self.current_states[wf_that_supplies_free_drainage_demand+1]
                             Z_below_fp, theta_below_fp, layer_below_fp = wf_below_free_drainage_one[0:3]
-                            G_fp = G(psi_of_theta(self.theta_s_vec[layer_fp], self.theta_s_vec[layer_fp], self.theta_r_vec[layer_fp], self.n_vec[layer_fp], self.m_vec[layer_fp], self.alpha_vec[layer_fp]), psi_of_theta(theta_below_fp, self.theta_s_vec[layer_fp], self.theta_r_vec[layer_fp], self.n_vec[layer_fp], self.m_vec[layer_fp], alpha_vec[layer_fp]), self.alpha_vec[layer_fp], self.n_vec[layer_fp], self.m_vec[layer_fp], self.K_s_vec[layer_fp])
+                            psi_b = self.psi_b_vec[layer_fp]
+                            lambdaa = self.lambda_vec[layer_fp]
+                            theta_r = self.theta_r_vec[layer_fp]
+                            theta_s = self.theta_s_vec[layer_fp]
+                            if self.closed_form_capillary_drive_term:
+                                G_fp = G_closed(theta_s,theta_below_fp,psi_b,lambdaa,theta_r,theta_s)
+                            else:
+                                G_fp = G(psi_of_theta(self.theta_s_vec[layer_fp], self.theta_s_vec[layer_fp], self.theta_r_vec[layer_fp], self.n_vec[layer_fp], self.m_vec[layer_fp], self.alpha_vec[layer_fp]), psi_of_theta(theta_below_fp, self.theta_s_vec[layer_fp], self.theta_r_vec[layer_fp], self.n_vec[layer_fp], self.m_vec[layer_fp], alpha_vec[layer_fp]), self.alpha_vec[layer_fp], self.n_vec[layer_fp], self.m_vec[layer_fp], self.K_s_vec[layer_fp])
 
 
                         # K_temp_below=0
@@ -709,11 +772,18 @@ class LGAR(BMI.base_BMI):
                                 Z_above_for_fp = Z_above_for_fp + self.max_depth_vec[k]
                                 sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + self.max_depth_vec[k]/self.K_s_vec[k]
 
-                            f_p = (Z_fp+Z_above_for_fp+G_fp)/(sum_of_thickness_over_saturated_conductivity_terms+Z_fp/self.K_s_vec[layer_fp])
+                            #####3 jan 2023: trying new f_p and dZdt formulation
+                            # f_p = (Z_fp+Z_above_for_fp+G_fp)/(sum_of_thickness_over_saturated_conductivity_terms+Z_fp/self.K_s_vec[layer_fp])
                             # if (layer_fp==1):
                             #     f_p = (Z_fp+self.max_depth_vec[0]+G_fp)/(self.max_depth_vec[0]/self.K_s_vec[0]+Z_fp/self.K_s_vec[1])
                             # if (layer_fp==2):
                             #     f_p = (Z_fp+self.max_depth_vec[0]+self.max_depth_vec[1]+G_fp)/(self.max_depth_vec[0]/self.K_s_vec[0]+self.max_depth_vec[1]/self.K_s_vec[1]+Z_fp/self.K_s_vec[2])
+
+                            sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + Z_fp/K_s_temp
+                            K_s_composite = (Z_fp+Z_above_for_fp)/(sum_of_thickness_over_saturated_conductivity_terms)
+                            f_p = K_s_composite+K_s_temp*G_fp/(Z_fp+Z_above_for_fp)
+                            #f_p = K_s_composite+K_s_composite*G_fp/(Z_fp+Z_above_for_fp)
+                            #f_p = K_s_temp*(1+G_fp/(Z_fp+Z_above_for_fp))
 
                             if ((layer_fp==(len(self.parameters)-1))&(self.current_states[0][1]==self.theta_s_vec[0])&(len(self.current_states)==len(self.parameters))): #
                                 f_p = 0#self.K_s_vec[-1]# that was for free drainage, edited 23 march
@@ -753,7 +823,14 @@ class LGAR(BMI.base_BMI):
                     else:
                         wf_below_free_drainage_one = self.current_states[wf_that_supplies_free_drainage_demand+1]
                         Z_below_fp, theta_below_fp, layer_below_fp = wf_below_free_drainage_one[0:3]
-                        G_fp = G(psi_of_theta(theta_s_vec[layer_fp], theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), psi_of_theta(theta_below_fp, theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), alpha_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], K_s_vec[layer_fp])
+                        psi_b = self.psi_b_vec[layer_fp]
+                        lambdaa = self.lambda_vec[layer_fp]
+                        theta_r = self.theta_r_vec[layer_fp]
+                        theta_s = self.theta_s_vec[layer_fp]
+                        if self.closed_form_capillary_drive_term:
+                            G_fp = G_closed(theta_s,theta_below_fp,psi_b,lambdaa,theta_r,theta_s)
+                        else:
+                            G_fp = G(psi_of_theta(theta_s_vec[layer_fp], theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), psi_of_theta(theta_below_fp, theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), alpha_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], K_s_vec[layer_fp])
 
                     if (layer_fp==0): #the calculation of potential infiltration capacity has different forms for different layers, closely analgous to the different forms for dZdt for the different layers in the derivs function.
                         f_p = K_s_temp*(1+G_fp/Z_fp)
@@ -765,7 +842,14 @@ class LGAR(BMI.base_BMI):
                             Z_above_for_fp = Z_above_for_fp + self.max_depth_vec[k]
                             sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + self.max_depth_vec[k]/self.K_s_vec[k]
 
-                        f_p = (Z_fp+Z_above_for_fp+G_fp)/(sum_of_thickness_over_saturated_conductivity_terms+Z_fp/self.K_s_vec[layer_fp])
+                        #####3 jan 2023: trying new f_p and dZdt formulation
+                        #f_p = (Z_fp+Z_above_for_fp+G_fp)/(sum_of_thickness_over_saturated_conductivity_terms+Z_fp/self.K_s_vec[layer_fp])
+
+                        sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + Z_fp/K_s_temp
+                        K_s_composite = (Z_fp+Z_above_for_fp)/(sum_of_thickness_over_saturated_conductivity_terms)
+                        f_p = K_s_composite+K_s_temp*G_fp/(Z_fp+Z_above_for_fp)
+                        #f_p = K_s_composite+K_s_composite*G_fp/(Z_fp+Z_above_for_fp)
+                        #f_p = K_s_temp*(1+G_fp/(Z_fp+Z_above_for_fp))
 
                         # if (layer_fp==1):
                         #     f_p = (Z_fp+self.max_depth_vec[0]+G_fp)/(self.max_depth_vec[0]/self.K_s_vec[0]+Z_fp/self.K_s_vec[1])
@@ -812,7 +896,14 @@ class LGAR(BMI.base_BMI):
                 else:
                     wf_below_free_drainage_one = self.current_states[wf_that_supplies_free_drainage_demand+1]
                     Z_below_fp, theta_below_fp, layer_below_fp = wf_below_free_drainage_one[0:3]
-                    G_fp = G(psi_of_theta(theta_s_vec[layer_fp], theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), psi_of_theta(theta_below_fp, theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), alpha_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], K_s_vec[layer_fp])
+                    psi_b = self.psi_b_vec[layer_fp]
+                    lambdaa = self.lambda_vec[layer_fp]
+                    theta_r = self.theta_r_vec[layer_fp]
+                    theta_s = self.theta_s_vec[layer_fp]
+                    if self.closed_form_capillary_drive_term:
+                        G_fp = G_closed(theta_s,theta_below_fp,psi_b,lambdaa,theta_r,theta_s)
+                    else:
+                        G_fp = G(psi_of_theta(theta_s_vec[layer_fp], theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), psi_of_theta(theta_below_fp, theta_s_vec[layer_fp], theta_r_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], alpha_vec[layer_fp]), alpha_vec[layer_fp], n_vec[layer_fp], m_vec[layer_fp], K_s_vec[layer_fp])
 
                 if (layer_fp==0): #the calculation of potential infiltration capacity has different forms for different layers, closely analgous to the different forms for dZdt for the different layers in the derivs function.
                     f_p = K_s_temp*(1+(G_fp+self.h_p)/Z_fp)
@@ -824,7 +915,14 @@ class LGAR(BMI.base_BMI):
                         Z_above_for_fp = Z_above_for_fp + self.max_depth_vec[k]
                         sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + self.max_depth_vec[k]/self.K_s_vec[k]
 
-                    f_p = (Z_fp+Z_above_for_fp+G_fp+self.h_p)/(sum_of_thickness_over_saturated_conductivity_terms+Z_fp/self.K_s_vec[layer_fp])
+                    #####3 jan 2023: trying new f_p and dZdt formulation
+                    #f_p = (Z_fp+Z_above_for_fp+G_fp+self.h_p)/(sum_of_thickness_over_saturated_conductivity_terms+Z_fp/self.K_s_vec[layer_fp])
+
+                    sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + Z_fp/K_s_temp
+                    K_s_composite = (Z_fp+Z_above_for_fp)/(sum_of_thickness_over_saturated_conductivity_terms)
+                    #f_p = K_s_composite+K_s_temp*G_fp/(Z_fp+Z_above_for_fp)
+                    #f_p = K_s_composite+K_s_composite*G_fp/(Z_fp+Z_above_for_fp)
+                    f_p = K_s_temp*(1+G_fp/(Z_fp+Z_above_for_fp))
 
                     # if (layer_fp==1):
                     #     f_p = (Z_fp+self.max_depth_vec[0]+G_fp)/(self.max_depth_vec[0]/self.K_s_vec[0]+Z_fp/self.K_s_vec[1])
@@ -1978,7 +2076,12 @@ class LGAR(BMI.base_BMI):
                 if ((precip_data[i]>0)&(precip_data[i-1]==0)&(self.current_states[0][1]<theta_s_vec[0])):
                     temp_theta = self.current_states[0][1]
                     tau = time_step*K_s_vec[0]/(theta_s_vec[0]-temp_theta)
-                    G_new_wf = G(psi_of_theta(theta_s_vec[0], theta_s_vec[0], theta_r_vec[0], n_vec[0], m_vec[0], alpha_vec[0]), psi_of_theta(temp_theta, theta_s_vec[0], theta_r_vec[0], n_vec[0],m_vec[0],alpha_vec[0]), alpha_vec[0], n_vec[0], m_vec[0], K_s_vec[0])
+                    psi_b = self.psi_b_vec[0]
+                    lambdaa = self.lambda_vec[0]
+                    if self.closed_form_capillary_drive_term:
+                        G_new_wf = G_closed(theta_s_vec[0],temp_theta,psi_b,lambdaa,theta_r_vec[0],theta_s_vec[0])
+                    else:
+                        G_new_wf = G(psi_of_theta(theta_s_vec[0], theta_s_vec[0], theta_r_vec[0], n_vec[0], m_vec[0], alpha_vec[0]), psi_of_theta(temp_theta, theta_s_vec[0], theta_r_vec[0], n_vec[0],m_vec[0],alpha_vec[0]), alpha_vec[0], n_vec[0], m_vec[0], K_s_vec[0])
                     dry_depth = min( 0.5*(tau + ( (tau**2) + 4*tau*G_new_wf )**0.5 ) , max_depth_vec[0] ) ### coefficient "x" in x*(tau should be 0.5. For basic sensitivity analysis to dry depth, sometimes I change it, but the theory from 2015 GAR paper says it's 0.5
                     ###!!! note that dry depth originally has a factor of 0.5 in front
                     if (dry_depth==max_depth_vec[0]):

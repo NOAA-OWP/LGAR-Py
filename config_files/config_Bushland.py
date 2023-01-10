@@ -10,9 +10,11 @@ time_step = 300/3600 #this is the time step in hours. The default value is 300/3
 
 initial_psi = 20000 #The initial capillary head (mm) set everywhere in the soil. Note that LGAR deals with absolute values of psi, so a value here of 1000 physically corresponds to a pressure head of -1000 mm everywhere.
 
-verbose = True #prints many model state, fluxes, and other interesting quantities if set to True
+verbose = False #prints many model state, fluxes, and other interesting quantities if set to True
 
 length_of_simulation = 100000 #This is the length of the simulation, in time steps.
+
+closed_form_capillary_drive_term = False
 
 #by default, the LGAR model does not save soil moisture profiles. This is achieved with the following line.
 time_steps_to_record_profile = ()
