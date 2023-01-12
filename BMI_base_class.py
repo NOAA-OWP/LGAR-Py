@@ -348,6 +348,11 @@ class base_BMI():
 
         print("run success! computation runtime:")
         print(self.runtime_1-self.runtime_0)
+        if self.verbose:
+            print('cumulative infiltration (mm):')
+            print(sum(self.actual_infiltration_vec)*self.time_step)
+            print(sum(self.runoff_vec)*self.time_step)
+            print('cumulative runoff (mm):')
 
 
     def get_attribute(self, att_name):
