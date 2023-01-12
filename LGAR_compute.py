@@ -774,10 +774,6 @@ class LGAR(BMI.base_BMI):
 
                             #####3 jan 2023: trying new f_p and dZdt formulation
                             # f_p = (Z_fp+Z_above_for_fp+G_fp)/(sum_of_thickness_over_saturated_conductivity_terms+Z_fp/self.K_s_vec[layer_fp])
-                            # if (layer_fp==1):
-                            #     f_p = (Z_fp+self.max_depth_vec[0]+G_fp)/(self.max_depth_vec[0]/self.K_s_vec[0]+Z_fp/self.K_s_vec[1])
-                            # if (layer_fp==2):
-                            #     f_p = (Z_fp+self.max_depth_vec[0]+self.max_depth_vec[1]+G_fp)/(self.max_depth_vec[0]/self.K_s_vec[0]+self.max_depth_vec[1]/self.K_s_vec[1]+Z_fp/self.K_s_vec[2])
 
                             sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + Z_fp/K_s_temp
                             K_s_composite = (Z_fp+Z_above_for_fp)/(sum_of_thickness_over_saturated_conductivity_terms)
@@ -920,9 +916,9 @@ class LGAR(BMI.base_BMI):
 
                     sum_of_thickness_over_saturated_conductivity_terms = sum_of_thickness_over_saturated_conductivity_terms + Z_fp/K_s_temp
                     K_s_composite = (Z_fp+Z_above_for_fp)/(sum_of_thickness_over_saturated_conductivity_terms)
-                    #f_p = K_s_composite+K_s_temp*G_fp/(Z_fp+Z_above_for_fp)
+                    f_p = K_s_composite+K_s_temp*G_fp/(Z_fp+Z_above_for_fp)
                     #f_p = K_s_composite+K_s_composite*G_fp/(Z_fp+Z_above_for_fp)
-                    f_p = K_s_temp*(1+G_fp/(Z_fp+Z_above_for_fp))
+                    #f_p = K_s_temp*(1+G_fp/(Z_fp+Z_above_for_fp))
 
                     # if (layer_fp==1):
                     #     f_p = (Z_fp+self.max_depth_vec[0]+G_fp)/(self.max_depth_vec[0]/self.K_s_vec[0]+Z_fp/self.K_s_vec[1])
