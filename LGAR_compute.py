@@ -418,7 +418,7 @@ class LGAR(BMI.base_BMI):
                         #sum_of_thickness_over_conductivity_terms_K_s = sum_of_thickness_over_conductivity_terms_K_s + Z/K_s
                         K_composite = (Z+Z_above)/sum_of_thickness_over_conductivity_terms
                         #K_s_composite = (Z+Z_above)/sum_of_thickness_over_conductivity_terms_K_s
-                        f_temp = [K_s*G_temp/(Z+Z_above)+K_composite]
+                        f_temp = [K_s*G_temp/(Z+Z_above)+K_composite] #test
 
                         f.append(f_temp)
 
