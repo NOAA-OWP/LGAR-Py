@@ -75,8 +75,11 @@ In order to run LGAR, ensure that the correct config file is indicated in test_e
 
 In the outputs folder, there are 6 complete simulation outputs, including 3 simulations of USDA SCAN sites, and 3 simulations with synthetically generated forcing datasets. All of the files necessary to run these simulations are also included. In order to check if LGAR is working properly for you, you can run these simulations and compare your results agains the outputs stored in this repo.
 
-## Known issues
+## Limitations
 
+LGAR is designed for arid and semi arid areas only. Specifically, LGAR is only suitable for environments in which PET>precipitation, and in which fluxes to groundwater are negligibly small compared to the other external fluxes (AET and precipitation). While there is technically a flux by which water leaves the model domain through the lower boundary, this is only based on a choice to ensure mass balance closure; namely, that the portion of a wetting front that exceeds the lower boundary is considered to be lost through the lower boundary. Typically, these fluxes tend to be minuscule, especially considering that wetting fronts that reach the lower boundary of the deepest layer are typically very slow. Essentially, LGAR should not be used for groundwater simulations, and should only be used in semi arid or arid areas. 
+
+## Known issues
 
 
 ## Getting involved
