@@ -27,19 +27,18 @@ time_steps_to_record_profile = ()
 
 
 
-
-
-
 #######
 ###file names and paths
-###this will be the path and name of the output file which contains the fluxes for each time step
-output_file_name_fluxes = '/Users/peterlafollette/Desktop/LGAR-Py/outputs/output_synth_2.pkl'
+###all the user has to do is specify the relative paths and names of the desired output file that will be created, and the parameters and forcing data files that should exist at the start of the model run
+import os, sys
+output_path_and_name = 'outputs/output_synth_2.pkl'
+params_file_path_and_name = 'parameter_files/params_synth_2.py'
+forcing_data_file_path_and_name = 'forcing_data_files/synth_2/forcing_data_resampled_synth_2.csv'
 
-###this is the path and name of the parameters file
-params_file = '/Users/peterlafollette/Desktop/LGAR-Py/parameter_files/params_synth_2.py'
-
-###this is the forcing data file that is in the correct format for LGAR-Py
-forcing_data_file = '/Users/peterlafollette/Desktop/LGAR-py/forcing_data_files/synth_2/forcing_data_resampled_synth_2.csv'
+###below this line the user doesn't have to edit anything
+output_file_name_fluxes = os.path.join(os.getcwd(),output_path_and_name)
+params_file = os.path.join(os.getcwd(),params_file_path_and_name)
+forcing_data_file = os.path.join(os.getcwd(),forcing_data_file_path_and_name)
 #######
 
 

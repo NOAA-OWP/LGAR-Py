@@ -3,13 +3,19 @@
 
 ###all the user has to do is specify the path of the config file in the block directly below. No other changes are necessary in test_env.py
 
-#######
+import os, sys
+config_file_path = 'config_files/config_synth_1.py'
+config_string = os.path.join(os.getcwd(),config_file_path)
+###code below this line does not need to be changed by the user
+
+
+####### old hardcoded paths, replaced with dynamic paths above 
 #config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_synth_1.py'
 #config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_synth_2.py'
 #config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_synth_3.py'
 #config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_Phillipsburg.py'
 #config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_Bushland.py'
-config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_Fort_Assiniboine.py'
+#config_string = '/Users/peterlafollette/Desktop/LGAR-Py/config_files/config_Fort_Assiniboine.py'
 #######
 
 
