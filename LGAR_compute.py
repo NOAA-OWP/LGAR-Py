@@ -2197,7 +2197,8 @@ class LGAR(BMI.base_BMI):
 
             self.mass_bal_vec.append(change_in_mass+self.fluxes[-1]+0*self.h_p_fluxes[-1])
             self.mass_balance_error_value_cumulative = self.mass_balance_error_value_cumulative + change_in_mass+self.fluxes[-1]+0*self.h_p_fluxes[-1]
-
+            #self.mass_vec = np.append(self.mass_vec, 0*self.h_p+(calc_mass_bal((self.previous_states))))
+            self.mass_vec[-1] = calc_mass_bal(self.current_states)
             #else:
             #    mass_bal_vec.append(mass_bal_vec[-1]+change_in_mass+fluxes[-1])
             #print(len(mass_bal_vec))
