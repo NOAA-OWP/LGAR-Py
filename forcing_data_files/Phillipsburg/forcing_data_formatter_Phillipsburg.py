@@ -2,9 +2,11 @@
 ###only the following 4 lines should be changed by the user
 forcing_data_folder = '~/desktop/LGAR-Py/forcing_data_files/Phillipsburg/'#This is the location of both the raw and reformatted forcing datasets.
 raw_forcing_data_file_name = 'forcing_data_Phillipsburg_raw.csv'#This is the input (raw) USDA SCAN forcing dataset.
-formatted_forcing_data_name = 'forcing_data_resampled_Phillipsburg.csv'#this will be the name of the output forcing data, in the correct format for LGAR-Py.
-time_step_formatting = 300/3600 #this is the output time step of the resampled forcing data, expressed in hours. The default value of 300/3600 is 5 minutes expressed in hours.
-
+formatted_forcing_data_name = 'forcing_data_resampled_uniform_Phillipsburg.csv'#this will be the name of the output forcing data, in the correct format for LGAR-Py.
+time_step_formatting = 300/3600 #1 #300/3600 for 5 min resolution, 1 for hourly #this is the output time step of the resampled forcing data, expressed in hours. The default value of 300/3600 is 5 minutes expressed in hours.
+###in the even that you're resampling precip data from a resolution that is coarser than 5 mins, would you like a uniform distribution of precip values or linear interpolation between values? They should yield *approximately* the same total mass of cumulative forcing data either way, just different strategies.
+###make this next variable 'pad' for uniform resampling or 'linear' for linear interpolation in resampling. The default method used in the LGAR manuscript is 'linear'.
+method = 'pad'
 
 
 
@@ -64,7 +66,7 @@ def forcing_data_formatter_fxn(path_string,raw_forcing_data_file_name,formatted_
     forcing_data.set_index('Datetime_date', inplace=True)
 
     resampling_frequency = str(int(freq*3600))+'S'
-    forcing_data = forcing_data.resample(resampling_frequency).interpolate()
+    forcing_data = forcing_data.resample(resampling_frequency).interpolate(method=method)
 
 
     forcing_data = forcing_data.filter(['P(mm/h)', 'PET(mm/h)'])
