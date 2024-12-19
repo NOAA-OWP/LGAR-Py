@@ -1,4 +1,4 @@
-###PLEASE NOTE: This repository is no longer under development. Please see LGAR-C for ongoing progress. While LGAR was initially developed in Python, the C version has undergone substantially more stability testing. It is generally not recommended to use the Python version. 
+# PLEASE NOTE: This repository is no longer under development. Please see LGAR-C for ongoing progress. While LGAR was initially developed in Python, the C version has undergone substantially more stability testing. It is generally not recommended to use the Python version. 
 
 # Layered Green & Ampt with redistribution (LGAR) in python
 
